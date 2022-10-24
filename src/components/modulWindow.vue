@@ -30,15 +30,12 @@ export default {
       type: String,
       required: true
     },
-    isOpen: {
-      type: Boolean,
-      required: true
-    }
   },
   emits: {
     ok: null,
     close: null
   },
+  popupController: null,
   name: 'modul-window',
   data() {
     return {
@@ -47,6 +44,7 @@ export default {
         'error': 'rgba(300,0,0,0.3)',
         'warning': 'rgba(300,300,0,0.3)'
       },
+      isOpen: false
     }
   },
   methods: {
@@ -56,11 +54,25 @@ export default {
       }
     },
     close() {
-      this.$emit('close');
-
+      this.isOpen = false;
+      this.$options.popupController.resolve(false);
     },
     confirm() {
-      this.$emit('ok')
+      this.$options.popupController.resolve(true);
+      this.isOpen = false;
+    },
+    open() {
+      let resolve;
+      let reject;
+      const popupPromise = new Promise((ok, fail) => {
+        resolve = ok;
+        reject = fail;
+      });
+
+      this.$options.popupController = { resolve, reject }
+      this.isOpen = true
+
+      return popupPromise;
     }
   },
   mounted() {

@@ -1,12 +1,18 @@
 <template>
-t
+  <ul>
+    <li v-for="item of items"
+        :key="item.id"
+    >
+      <slot :item="item"></slot>
+    </li>
+  </ul>
 </template>
 
 <script>
 export default {
   name: "list-app",
   props: {
-    data: {
+    items: {
       type: Array,
       require: true
     }
@@ -24,7 +30,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.list {
-  margin-left: 100px;
+ul {
+  width: max-content;
+  text-align: left;
+  li {
+    padding: 0 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>
